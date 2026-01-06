@@ -1,0 +1,37 @@
+name: 'Buddy Download Package'
+description: 'Download packages from Buddy CI/CD platform'
+author: 'Marcel Gańczarczyk'
+runs:
+  using: 'node24'
+  main: 'dist/index.js'
+inputs:
+  workspace:
+    description: 'Buddy workspace domain'
+    required: true
+  project:
+    description: 'Buddy project name (URL handle)'
+    required: true
+  identifier:
+    description: 'Package identifier with optional version (e.g., my-package or my-package@1.0.0)'
+    required: true
+  directory:
+    description: 'Path to the directory to download to'
+    required: true
+  merge:
+    description: 'Merge contents of the directory with package'
+    required: false
+  replace:
+    description: 'Replace contents of the directory with package'
+    required: false
+  region:
+    description: 'Override default region (EU, US, or AP)'
+    required: false
+  api:
+    description: 'Override API URL'
+    required: false
+outputs:
+  package_path:
+    description: 'The path where the package was downloaded'
+branding:
+  icon: 'download'
+  color: 'blue'
