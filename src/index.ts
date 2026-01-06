@@ -1,0 +1,51 @@
+import { getInput, info, setFailed, warning } from '@actions/core'
+import { ensureBdyInstalled } from '@/api/bdy'
+import { checkBuddyCredentials, downloadPackage } from '@/download'
+import type { IInputs } from '@/types/inputs'
+import { normalizeError } from '@/utils/error'
+
+function parseBooleanInput(name: string): boolean {
+  const value = getInput(name)
+
+  if (!value) {
+    return false
+  }
+
+  if (value !== 'true' && value !== 'false') {
+    warning(
+      `Invalid boolean value for '${name}': "${value}". Expected 'true' or 'false'. Treating as false.`,
+    )
+    return false
+  }
+
+  return value === 'true'
+}
+
+async function run(): Promise<void> {
+  await ensureBdyInstalled()
+  checkBuddyCredentials()
+
+  const inputs: IInputs = {
+    workspace: getInput('workspace', { required: true }),
+    project: getInput('project', { required: true }),
+    identifier: getInput('identifier', { required: true }),
+    directory: getInput('directory', { required: true }),
+    merge: parseBooleanInput('merge'),
+    replace: parseBooleanInput('replace'),
+    region: getInput('region') || undefined,
+    api: getInput('api') || undefined,
+  }
+
+  await downloadPackage(inputs)
+
+  info('Package downloaded successfully')
+}
+
+run()
+  .then(() => {
+    process.exit(0)
+  })
+  .catch((error: unknown) => {
+    setFailed(normalizeError(error))
+    process.exit(1)
+  })
