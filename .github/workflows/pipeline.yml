@@ -1,0 +1,61 @@
+name: Download Buddy Package from GitHub Actions
+
+on: [push, pull_request, workflow_dispatch]
+
+jobs:
+  test-with-setup:
+    name: Test with minimal setup
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to Buddy
+        uses: buddy/login@v1
+        with:
+          token: ${{ secrets.TOKEN }}
+          region: 'US'
+
+      - name: Download package
+        uses: ./
+        with:
+          workspace: buddy-workshop-devs
+          project: tttt
+          identifier: my-package
+          directory: ./packages
+
+      - name: Download versioned package
+        uses: ./
+        with:
+          workspace: buddy-workshop-devs
+          project: tttt
+          identifier: my-package@1.0.0
+          directory: ./packages-versioned
+
+      - name: Download with merge option
+        uses: ./
+        with:
+          workspace: buddy-workshop-devs
+          project: tttt
+          identifier: my-package
+          directory: ./packages-merge
+          merge: true
+
+      - name: Download with replace option
+        uses: ./
+        with:
+          workspace: buddy-workshop-devs
+          project: tttt
+          identifier: my-package
+          directory: ./packages-replace
+          replace: true
+
+      - name: Download with region override
+        uses: ./
+        with:
+          workspace: buddy-workshop-devs
+          project: tttt
+          identifier: my-package
+          directory: ./packages-region
+          region: US
