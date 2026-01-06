@@ -3,8 +3,8 @@ name: Download Buddy Package from GitHub Actions
 on: [push, pull_request, workflow_dispatch]
 
 jobs:
-  test-with-setup:
-    name: Test with minimal setup
+  test-download-success:
+    name: Test successful downloads
     runs-on: ubuntu-latest
 
     steps:
@@ -21,30 +21,62 @@ jobs:
         uses: buddy/setup@v1
         with:
           installation_method: 'npm'
-          env: 'prod'
+          env: 'dev-package'
 
-      - name: Download package
+      - name: Download package (latest)
         uses: ./
         with:
           workspace: buddy-workshop-devs
           project: tttt
-          identifier: my-package
+          identifier: test-package
           directory: ./packages
+
+      - name: Verify download
+        run: |
+          if [ -d "./packages" ]; then
+            echo "✅ Package downloaded successfully"
+            ls -la ./packages
+            if [ -f "./packages/index.js" ]; then
+              echo "✅ index.js found in package"
+            else
+              echo "❌ index.js not found in package"
+              exit 1
+            fi
+          else
+            echo "❌ Package download failed"
+            exit 1
+          fi
 
       - name: Download versioned package
         uses: ./
         with:
           workspace: buddy-workshop-devs
           project: tttt
-          identifier: my-package@1.0.0
+          identifier: test-package@1.0.0
           directory: ./packages-versioned
+
+      - name: Verify versioned download
+        run: |
+          if [ -d "./packages-versioned" ]; then
+            echo "✅ Versioned package downloaded successfully"
+            ls -la ./packages-versioned
+            if [ -f "./packages-versioned/index.js" ]; then
+              echo "✅ index.js found in versioned package"
+            else
+              echo "❌ index.js not found in versioned package"
+              exit 1
+            fi
+          else
+            echo "❌ Versioned package download failed"
+            exit 1
+          fi
 
       - name: Download with merge option
         uses: ./
         with:
           workspace: buddy-workshop-devs
           project: tttt
-          identifier: my-package
+          identifier: test-package@1.0.0
           directory: ./packages-merge
           merge: true
 
@@ -53,7 +85,7 @@ jobs:
         with:
           workspace: buddy-workshop-devs
           project: tttt
-          identifier: my-package
+          identifier: test-package@1.0.0
           directory: ./packages-replace
           replace: true
 
@@ -62,6 +94,102 @@ jobs:
         with:
           workspace: buddy-workshop-devs
           project: tttt
-          identifier: my-package
+          identifier: test-package@1.0.0
           directory: ./packages-region
           region: US
+
+  test-download-failure:
+    name: Test failed downloads
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Login to Buddy
+        uses: buddy/login@v1
+        with:
+          token: ${{ secrets.TOKEN }}
+          region: 'US'
+
+      - name: Setup BDY CLI
+        uses: buddy/setup@v1
+        with:
+          installation_method: 'npm'
+          env: 'dev-package'
+
+      - name: Download non-existent package (should fail)
+        id: download-nonexistent
+        continue-on-error: true
+        uses: ./
+        with:
+          workspace: buddy-workshop-devs
+          project: tttt
+          identifier: non-existent-package-${{ github.run_id }}
+          directory: ./packages-fail
+
+      - name: Verify non-existent package failed
+        run: |
+          if [ "${{ steps.download-nonexistent.outcome }}" == "failure" ]; then
+            echo "✅ Action correctly failed for non-existent package"
+          else
+            echo "❌ Action should have failed but succeeded"
+            exit 1
+          fi
+
+      - name: Download non-existent version (should fail)
+        id: download-bad-version
+        continue-on-error: true
+        uses: ./
+        with:
+          workspace: buddy-workshop-devs
+          project: tttt
+          identifier: test-package@999.999.999
+          directory: ./packages-bad-version
+
+      - name: Verify non-existent version failed
+        run: |
+          if [ "${{ steps.download-bad-version.outcome }}" == "failure" ]; then
+            echo "✅ Action correctly failed for non-existent version"
+          else
+            echo "❌ Action should have failed but succeeded"
+            exit 1
+          fi
+
+      - name: Download from non-existent workspace (should fail)
+        id: download-bad-workspace
+        continue-on-error: true
+        uses: ./
+        with:
+          workspace: non-existent-workspace-${{ github.run_id }}
+          project: tttt
+          identifier: test-package
+          directory: ./packages-bad-workspace
+
+      - name: Verify non-existent workspace failed
+        run: |
+          if [ "${{ steps.download-bad-workspace.outcome }}" == "failure" ]; then
+            echo "✅ Action correctly failed for non-existent workspace"
+          else
+            echo "❌ Action should have failed but succeeded"
+            exit 1
+          fi
+
+      - name: Download from non-existent project (should fail)
+        id: download-bad-project
+        continue-on-error: true
+        uses: ./
+        with:
+          workspace: buddy-workshop-devs
+          project: non-existent-project-${{ github.run_id }}
+          identifier: test-package
+          directory: ./packages-bad-project
+
+      - name: Verify non-existent project failed
+        run: |
+          if [ "${{ steps.download-bad-project.outcome }}" == "failure" ]; then
+            echo "✅ Action correctly failed for non-existent project"
+          else
+            echo "❌ Action should have failed but succeeded"
+            exit 1
+          fi
