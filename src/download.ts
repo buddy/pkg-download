@@ -76,7 +76,6 @@ export async function downloadPackage(inputs: IInputs): Promise<IOutputs> {
 
   setOutput('package_path', packagePath)
   exportVariable('BUDDY_PACKAGE_PATH', packagePath)
-  info(`Package downloaded to: ${packagePath}`)
 
   return outputs
 }

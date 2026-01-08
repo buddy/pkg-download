@@ -1,4 +1,4 @@
-import { getInput, info, setFailed, warning } from '@actions/core'
+import { getInput, setFailed, warning } from '@actions/core'
 import { ensureBdyInstalled } from '@/api/bdy'
 import { checkBuddyCredentials, downloadPackage } from '@/download'
 import type { IInputs } from '@/types/inputs'
@@ -37,8 +37,6 @@ async function run(): Promise<void> {
   }
 
   await downloadPackage(inputs)
-
-  info('Package downloaded successfully')
 }
 
 run()
