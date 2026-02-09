@@ -21,13 +21,13 @@ jobs:
         uses: buddy/setup@v1
         with:
           installation_method: 'npm'
-          env: 'dev-package'
+          env: 'dev'
 
       - name: Download package (latest)
         uses: ./
         with:
           workspace: buddy-workshop-devs
-          project: tttt
+          project: ttttesty
           identifier: test-package
           directory: ./packages
 
@@ -51,7 +51,7 @@ jobs:
         uses: ./
         with:
           workspace: buddy-workshop-devs
-          project: tttt
+          project: ttttesty
           identifier: test-package@1.0.0
           directory: ./packages-versioned
 
@@ -75,7 +75,7 @@ jobs:
         uses: ./
         with:
           workspace: buddy-workshop-devs
-          project: tttt
+          project: ttttesty
           identifier: test-package@1.0.0
           directory: ./packages-merge
           merge: true
@@ -84,19 +84,10 @@ jobs:
         uses: ./
         with:
           workspace: buddy-workshop-devs
-          project: tttt
+          project: ttttesty
           identifier: test-package@1.0.0
           directory: ./packages-replace
           replace: true
-
-      - name: Download with region override
-        uses: ./
-        with:
-          workspace: buddy-workshop-devs
-          project: tttt
-          identifier: test-package@1.0.0
-          directory: ./packages-region
-          region: US
 
   test-download-failure:
     name: Test failed downloads
@@ -116,7 +107,7 @@ jobs:
         uses: buddy/setup@v1
         with:
           installation_method: 'npm'
-          env: 'dev-package'
+          env: 'dev'
 
       - name: Download non-existent package (should fail)
         id: download-nonexistent
@@ -124,7 +115,7 @@ jobs:
         uses: ./
         with:
           workspace: buddy-workshop-devs
-          project: tttt
+          project: ttttesty
           identifier: non-existent-package-${{ github.run_id }}
           directory: ./packages-fail
 
@@ -143,7 +134,7 @@ jobs:
         uses: ./
         with:
           workspace: buddy-workshop-devs
-          project: tttt
+          project: ttttesty
           identifier: test-package@999.999.999
           directory: ./packages-bad-version
 
@@ -162,7 +153,7 @@ jobs:
         uses: ./
         with:
           workspace: non-existent-workspace-${{ github.run_id }}
-          project: tttt
+          project: ttttesty
           identifier: test-package
           directory: ./packages-bad-workspace
 

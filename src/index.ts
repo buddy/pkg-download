@@ -32,7 +32,6 @@ async function run(): Promise<void> {
     directory: getInput('directory', { required: true }),
     merge: parseBooleanInput('merge'),
     replace: parseBooleanInput('replace'),
-    region: getInput('region') || undefined,
     api: getInput('api') || undefined,
   }
 

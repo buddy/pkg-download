@@ -7,7 +7,6 @@ Download packages from Buddy CI/CD platform in GitHub Actions workflows.
 - Download packages directly in GitHub Actions
 - Support for versioned packages (package@version)
 - Merge or replace directory contents
-- Region support (EU, US, AP)
 
 ## Usage
 
@@ -76,19 +75,6 @@ jobs:
     replace: true
 ```
 
-### With Region Override
-
-```yaml
-- name: Download from specific region
-  uses: buddy/download-package@v1
-  with:
-    workspace: my-workspace
-    project: my-project
-    identifier: my-package
-    directory: ./packages
-    region: AP  # EU, US, or AP
-```
-
 ## Inputs
 
 | Input        | Required | Description                                                              |
@@ -99,7 +85,6 @@ jobs:
 | `directory`  | Yes      | Path to the directory to download to                                     |
 | `merge`      | No       | Merge contents of the directory with package (`true`/`false`)            |
 | `replace`    | No       | Replace contents of the directory with package (`true`/`false`)          |
-| `region`     | No       | Override default region: `EU`, `US`, or `AP`                             |
 | `api`        | No       | Override API URL                                                         |
 
 ## Outputs
