@@ -23,9 +23,6 @@ inputs:
   replace:
     description: 'Replace contents of the directory with package'
     required: false
-  api:
-    description: 'Override API URL'
-    required: false
 outputs:
   package_path:
     description: 'The path where the package was downloaded'

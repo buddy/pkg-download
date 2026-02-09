@@ -5,5 +5,4 @@ export interface IInputs {
   directory: string
   merge?: boolean
   replace?: boolean
-  api?: string
 }

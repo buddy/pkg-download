@@ -32,7 +32,6 @@ async function run(): Promise<void> {
     directory: getInput('directory', { required: true }),
     merge: parseBooleanInput('merge'),
     replace: parseBooleanInput('replace'),
-    api: getInput('api') || undefined,
   }
 
   await downloadPackage(inputs)

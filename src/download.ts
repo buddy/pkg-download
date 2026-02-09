@@ -48,10 +48,6 @@ export async function downloadPackage(inputs: IInputs): Promise<IOutputs> {
     info('Will replace contents of the directory')
   }
 
-  if (inputs.api) {
-    args.push('--api', inputs.api)
-  }
-
   await executeCommand(process.env.BDY_PATH || 'bdy', args)
 
   const packagePath = resolve(inputs.directory)

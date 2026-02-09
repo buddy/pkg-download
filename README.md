@@ -85,7 +85,6 @@ jobs:
 | `directory`  | Yes      | Path to the directory to download to                                     |
 | `merge`      | No       | Merge contents of the directory with package (`true`/`false`)            |
 | `replace`    | No       | Replace contents of the directory with package (`true`/`false`)          |
-| `api`        | No       | Override API URL                                                         |
 
 ## Outputs
 
