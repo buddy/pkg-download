@@ -52,7 +52,7 @@ jobs:
         with:
           workspace: buddy-workshop-devs
           project: ttttesty
-          identifier: test-package@1.0.0
+          identifier: test-package@1.0.1
           directory: ./packages-versioned
 
       - name: Verify versioned download
